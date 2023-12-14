@@ -1,60 +1,67 @@
 #include <stdio.h>
-#include "D:\New folder\OneDrive - National University of Sciences & Technology\Programs\FreeImage3180Win32Win64\FreeImage\Dist\x32\FreeImage.h"
-#include <string.h>
-void convertToGrayscale(FIBITMAP *image) {
-    int width = FreeImage_GetWidth(image);
-    int height = FreeImage_GetHeight(image);
+#include "freeimage_declarations.h"
 
-    for (int y = 0; y < height; y++) {
-        for (int x = 0; x < width; x++) {
+void convertToGrayscale(FIBITMAP* image) {
+    unsigned width = FreeImage_GetWidth(image);
+    unsigned height = FreeImage_GetHeight(image);
+    FREE_IMAGE_TYPE imageType = FreeImage_GetImageType(image);
+
+    for (unsigned y = 0; y < height; y++) {
+        for (unsigned x = 0; x < width; x++) {
             RGBQUAD pixel;
             FreeImage_GetPixelColor(image, x, y, &pixel);
 
-            // Convert the pixel to grayscale
-            BYTE grayscale = (BYTE)(0.3 * pixel.rgbRed + 0.59 * pixel.rgbGreen + 0.11 * pixel.rgbBlue);
+            // Convert the pixel to grayscale based on image type
+            BYTE gray;
+            if (imageType == FIT_BITMAP) {
+                // For standard bitmap images (such as PNG)
+                gray = (BYTE)(0.299 * pixel.rgbRed + 0.587 * pixel.rgbGreen + 0.114 * pixel.rgbBlue);
+            } else if (imageType == FIT_UINT16) {
+                // For 16-bit grayscale images
+                gray = (BYTE)(0.5 * (pixel.rgbRed + pixel.rgbGreen));
+            } else {
+                // Add additional cases as needed for other image types
+                gray = (BYTE)((pixel.rgbRed + pixel.rgbGreen + pixel.rgbBlue) / 3);
+            }
 
-            // Set the pixel to the grayscale value
-            pixel.rgbRed = grayscale;
-            pixel.rgbGreen = grayscale;
-            pixel.rgbBlue = grayscale;
+            pixel.rgbRed = pixel.rgbGreen = pixel.rgbBlue = gray;
 
             FreeImage_SetPixelColor(image, x, y, &pixel);
         }
     }
 }
 
-int main() {
-    char inputFileName[256];  // Assuming a reasonable maximum length for the file path
 
-    // Prompt the user to enter the image file path
-    printf("Enter the path of the image file: ");
-    fgets(inputFileName, sizeof(inputFileName), stdin);
-    inputFileName[strcspn(inputFileName, "\n")] = '\0';  // Remove the trailing newline character, if any
+int main(int argc, char *argv[]) {
+    if (argc != 3) {
+        fprintf(stderr, "Usage: %s <input_filename> <output_filename>\n", argv[0]);
+        return 1;
+    }
 
-    // Load the image based on the user-provided file path
-    FIBITMAP *image = FreeImage_Load(FIF_JPEG, inputFileName, JPEG_DEFAULT);
+    const char* inputFilename = argv[1];
+    const char* outputFilename = argv[2];
 
-if (!image) {
-    fprintf(stderr, "Error loading image\n");
-    fprintf(stderr, "File Location: %s\n", inputFileName);
-    return 1;
-}
+    printf("Input Filename: %s\n", inputFilename);
 
-    // Apply a simple grayscale conversion
+    // Load an image using FreeImage
+    FIBITMAP* image = FreeImage_Load(FIF_PNG, inputFilename, 0);
+
+    if (!image) {
+        fprintf(stderr, "Failed to load the image: %s\n", inputFilename);
+        return 1;
+    }
+
+    printf("Image loaded successfully\n");
+
+    // Perform the image processing
     convertToGrayscale(image);
 
     // Save the processed image
-    const char *outputFileName = "output.jpg";
-    if (!FreeImage_Save(FIF_JPEG, image, outputFileName, JPEG_DEFAULT)) {
-        fprintf(stderr, "Error saving image\n");
-        FreeImage_Unload(image);
-        return 1;
-    }
+    FreeImage_Save(FIF_PNG, image, outputFilename, 0);
 
     // Unload the image
     FreeImage_Unload(image);
 
-    printf("Image processed successfully. Saved as %s\n", outputFileName);
-
     return 0;
 }
+

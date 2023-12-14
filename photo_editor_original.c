@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "D:\New folder\OneDrive - National University of Sciences & Technology\Programs\FreeImage3180Win32Win64\FreeImage\Dist\x32\FreeImage.h"
+#include "FreeImage.h"
 #undef main
 // Function to apply a simple grayscale conversion to an image
 void convertToGrayscale(FIBITMAP *image) {
