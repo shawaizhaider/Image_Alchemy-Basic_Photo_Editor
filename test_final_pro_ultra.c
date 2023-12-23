@@ -71,6 +71,7 @@ void blur(FIBITMAP *image, int radius) {
     FreeImage_Unload(filteredImage);
 }
 
+
 int main() {
     int radius;
     char str[200];
@@ -94,14 +95,7 @@ int main() {
 
     // Load an image (replace "input.jpg" with your image file)
     const char *inputFileName = str_final;
-    FREE_IMAGE_FORMAT fif = FreeImage_GetFileType(inputFileName, 0);
-
-    if (fif == FIF_UNKNOWN) {
-        fprintf(stderr, "Unsupported image format\n");
-        return 1;
-    }
-
-    FIBITMAP *image = FreeImage_Load(fif, inputFileName, 0);
+    FIBITMAP *image = FreeImage_Load(FIF_JPEG, inputFileName, JPEG_DEFAULT);
 
     if (!image) {
         fprintf(stderr, "Error loading image\n");
@@ -136,32 +130,13 @@ int main() {
 
     // Save the processed image
     char output[50];
-    const char *extension = NULL;
-
-    switch (fif) {
-        case FIF_JPEG:
-            extension = "jpg";
-            break;
-        case FIF_PNG:
-            extension = "png";
-            break;
-        // Add more cases for other supported formats as needed
-        default:
-            fprintf(stderr, "Unsupported image format\n");
-            FreeImage_Unload(image);
-            return 1;
-    }
-
-    // Ask the user for the output file name
+    char extension[] = ".jpg";
     printf("Enter the name of the output file without extension: ");
-    fflush(stdin);
-    gets(output);
-
-    // Concatenate the output file name with the determined extension
-    strcat(output, ".");
+    scanf("%s", output);
     strcat(output, extension);
+    const char *outputFileName = output;
 
-    if (!FreeImage_Save(fif, image, output, 0)) {
+    if (!FreeImage_Save(FIF_JPEG, image, outputFileName, JPEG_DEFAULT)) {
         fprintf(stderr, "Error saving image\n");
         FreeImage_Unload(image);
         return 1;
@@ -170,7 +145,7 @@ int main() {
     // Unload the image
     FreeImage_Unload(image);
 
-    printf("Image processed successfully. Saved as %s\n", output);
+    printf("Image processed successfully. Saved as %s\n", outputFileName);
 
     return 0;
 }
