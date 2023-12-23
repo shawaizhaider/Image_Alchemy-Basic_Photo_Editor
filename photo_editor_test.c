@@ -1,35 +1,64 @@
 // photo_editor_test.c
 #include <stdio.h>
-#include "freeimage_declarations.h"
+#include <stdlib.h>
+#include <string.h>
+#include "FreeImage.h"
 
-void convertToGrayscale(FIBITMAP* image) {
-    unsigned width = FreeImage_GetWidth(image);
-    unsigned height = FreeImage_GetHeight(image);
+// Function to apply a simple averaging filter for noise reduction
+void applyNoiseReduction(FIBITMAP* image, int radius) {
+    int width = FreeImage_GetWidth(image);
+    int height = FreeImage_GetHeight(image);
 
-    for (unsigned y = 0; y < height; y++) {
-        for (unsigned x = 0; x < width; x++) {
-            RGBQUAD pixel;
-            FreeImage_GetPixelColor(image, x, y, &pixel);
+    // Create a temporary image to store the filtered result
+    FIBITMAP* filteredImage = FreeImage_Clone(image);
 
-            // Convert the pixel to grayscale using luminosity method
-            BYTE gray = (BYTE)(0.21 * pixel.rgbRed + 0.72 * pixel.rgbGreen + 0.07 * pixel.rgbBlue);
+    // Apply the noise reduction filter to each pixel
+    for (int y = 0; y < height; ++y) {
+        for (int x = 0; x < width; ++x) {
+            int count = 0;
+            int accR = 0, accG = 0, accB = 0;
 
-            pixel.rgbRed = pixel.rgbGreen = pixel.rgbBlue = gray;
+            for (int i = -radius; i <= radius; ++i) {
+                for (int j = -radius; j <= radius; ++j) {
+                    int xi = x + i;
+                    int yj = y + j;
 
-            FreeImage_SetPixelColor(image, x, y, &pixel);
+                    if (xi >= 0 && xi < width && yj >= 0 && yj < height) {
+                        RGBQUAD pixel;
+                        FreeImage_GetPixelColor(image, xi, yj, &pixel);
+                        accR += pixel.rgbRed;
+                        accG += pixel.rgbGreen;
+                        accB += pixel.rgbBlue;
+                        count++;
+                    }
+                }
+            }
+
+            RGBQUAD filteredPixel;
+            filteredPixel.rgbRed = (BYTE)(accR / count);
+            filteredPixel.rgbGreen = (BYTE)(accG / count);
+            filteredPixel.rgbBlue = (BYTE)(accB / count);
+            FreeImage_SetPixelColor(filteredImage, x, y, &filteredPixel);
         }
     }
+
+    // Copy the filtered image back to the original image
+    FreeImage_Unload(image);
+    image = FreeImage_Clone(filteredImage);
+    FreeImage_Unload(filteredImage);
 }
 
-
 int main(int argc, char *argv[]) {
-    if (argc != 3) {
-        fprintf(stderr, "Usage: %s <input_image_path> <output_image_path>\n", argv[0]);
+    if (argc != 5) {
+        fprintf(stderr, "Usage: %s <input_image_path> <output_image_path> <operation> <radius>\n", argv[0]);
+        fprintf(stderr, "Available operations: noise_reduction, grayscale\n");
         return 1;
     }
 
     const char *inputPath = argv[1];
     const char *outputPath = argv[2];
+    const char *operation = argv[3];
+    int radius = atoi(argv[4]);  // Convert radius argument to an integer
 
     FREE_IMAGE_FORMAT fif = FreeImage_GetFileType(inputPath, 0);
     if (fif == FIF_UNKNOWN) {
@@ -44,8 +73,20 @@ int main(int argc, char *argv[]) {
             return 1;
         }
 
-        // Perform the image processing
-        convertToGrayscale(image);
+        // Perform the selected operation
+        if (strcmp(operation, "noise_reduction") == 0) {
+            // Apply simple averaging filter for noise reduction
+            applyNoiseReduction(image, radius);
+        } else if (strcmp(operation, "grayscale") == 0) {
+            // Convert the image to grayscale
+            FIBITMAP* grayscaleImage = FreeImage_ConvertToGreyscale(image);
+            FreeImage_Unload(image);
+            image = grayscaleImage;
+        } else {
+            fprintf(stderr, "Unknown operation: %s\n", operation);
+            FreeImage_Unload(image);
+            return 1;
+        }
 
         // Save the processed image
         if (!FreeImage_Save(FIF_PNG, image, outputPath, 0)) {
@@ -53,9 +94,6 @@ int main(int argc, char *argv[]) {
             FreeImage_Unload(image);
             return 1;
         }
-        FREE_IMAGE_TYPE imageType = FreeImage_GetImageType(image);
-        printf("Image Type: %d\n", imageType);
-
 
         // Unload the image
         FreeImage_Unload(image);
