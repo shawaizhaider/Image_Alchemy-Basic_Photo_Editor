@@ -9,7 +9,6 @@
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 
 
-// copy goes here
 
 // Function to set text color on Windows console
 void displayTextWithAnimation(const char *text) {
@@ -59,17 +58,30 @@ int selection_menu(){
     int keyPressed = 0;
     while(keyPressed!=13){
     system("cls");
+    printf("\n\t\t\t\t\t**********Select your Desired function**********");
+    printf("\n\n\n\n\n\n\t\t\t\t\t");
     arrowHere(1,position); printf("1. Convert to Grayscale\n");
+    printf("\t\t\t\t\t");
     arrowHere(2,position); printf("2. Apply Gaussian Blur to Images\n");
+    printf("\t\t\t\t\t");
     arrowHere(3,position); printf("3. Change Brightness of Image\n");
+    printf("\t\t\t\t\t");
     arrowHere(4,position); printf("4. Rotate Image\n");
+    printf("\t\t\t\t\t");
     arrowHere(5,position); printf("5. Apply Sepia Filter\n");
+    printf("\t\t\t\t\t");
     arrowHere(6,position); printf("6. Flip Horizontal\n");
+    printf("\t\t\t\t\t");
     arrowHere(7,position); printf("7. Flip Vertical\n");
+    printf("\t\t\t\t\t");
     arrowHere(8,position); printf("8. Crop Image\n");
+    printf("\t\t\t\t\t");
     arrowHere(9,position); printf("9. Resize Image\n");
+    printf("\t\t\t\t\t");
     arrowHere(10,position); printf("10. Apply Sharpen Filter:\n");
+    printf("\t\t\t\t\t");
     arrowHere(11,position); printf("11. Invert Colors of Image(Negative Image).\n");
+    printf("\t\t\t\t\t");
     arrowHere(12,position); printf("12. Apply Artistic Filter\n");
     keyPressed = getch(); 
     fflush(stdin);
@@ -156,7 +168,7 @@ void blur(FIBITMAP *image, int radius) {
 
     FreeImage_Unload(filteredImage);
 }
-// copy goes here
+
 void adjustBrightness(FIBITMAP* image, float factor) {
     int width = FreeImage_GetWidth(image);
     int height = FreeImage_GetHeight(image);
@@ -175,20 +187,30 @@ void adjustBrightness(FIBITMAP* image, float factor) {
         }
     }
 }
-// till here
-// then here
-void rotateImage(FIBITMAP *image, double angle) {
+
+
+// void rotateImage(FIBITMAP *image, double angle) {
+//     // Rotate the image and replace the original image with the rotated one
+//     FIBITMAP *rotatedImage = FreeImage_Rotate(image, angle, NULL);
+
+//     // Unload the original image
+//     FreeImage_Unload(image);
+
+//     // Replace the original image with the rotated one
+//     image = rotatedImage;
+// }
+//change
+void rotateImage(FIBITMAP **image, double angle) {
     // Rotate the image and replace the original image with the rotated one
-    FIBITMAP *rotatedImage = FreeImage_Rotate(image, angle, NULL);
+    FIBITMAP *rotatedImage = FreeImage_Rotate(*image, angle, NULL);
 
     // Unload the original image
-    FreeImage_Unload(image);
+    FreeImage_Unload(*image);
 
     // Replace the original image with the rotated one
-    image = rotatedImage;
+    *image = rotatedImage;
 }
-// till here
-//goes here
+
 void applySepiaFilter(FIBITMAP* image) {
     int width = FreeImage_GetWidth(image);
     int height = FreeImage_GetHeight(image);
@@ -222,24 +244,48 @@ void flipVertical(FIBITMAP* image) {
 }
 
 // Function to crop an image
-void cropImage(FIBITMAP* image, int startX, int startY, int width, int height) {
-    FIBITMAP* croppedImage = FreeImage_Copy(image, startX, startY, startX + width, startY + height);
-    FreeImage_Unload(image);
-    image = croppedImage;
+// void cropImage(FIBITMAP* image, int startX, int startY, int width, int height) {
+//     FIBITMAP* croppedImage = FreeImage_Copy(image, startX, startY, startX + width, startY + height);
+//     FreeImage_Unload(image);
+//     image = croppedImage;
+// }
+// change
+void cropImage(FIBITMAP** image, int startX, int startY, int width, int height) {
+    FIBITMAP* croppedImage = FreeImage_Copy(*image, startX, startY, startX + width, startY + height);
+    
+    FreeImage_Unload(*image);  // Free memory of the original image
+    *image = croppedImage;     // Update the original image pointer
 }
+
+
+//change
+
+
 
 // Function to resize an image
 // Function to resize an image
-void resizeImage(FIBITMAP* image, int newWidth, int newHeight) {
+// void resizeImage(FIBITMAP* image, int newWidth, int newHeight) {
+//     // Resize the image using FreeImage_Rescale
+//     FIBITMAP* resizedImage = FreeImage_Rescale(image, newWidth, newHeight, FILTER_BICUBIC);
+
+//     // Unload the original image
+//     FreeImage_Unload(image);
+
+//     // Replace the original image with the resized one
+//     image = resizedImage;
+// }
+// change
+void resizeImage(FIBITMAP** image, int newWidth, int newHeight) {
     // Resize the image using FreeImage_Rescale
-    FIBITMAP* resizedImage = FreeImage_Rescale(image, newWidth, newHeight, FILTER_BICUBIC);
+    FIBITMAP* resizedImage = FreeImage_Rescale(*image, newWidth, newHeight, FILTER_BICUBIC);
 
     // Unload the original image
-    FreeImage_Unload(image);
+    FreeImage_Unload(*image);
 
     // Replace the original image with the resized one
-    image = resizedImage;
+    *image = resizedImage;
 }
+
 
 void applySharpenFilter(FIBITMAP* image) {
     int width = FreeImage_GetWidth(image);
@@ -334,14 +380,21 @@ int main() {
     system("cls");
     displayMainMenu();
     char choice_m='y';
+    printf("\n\n\n\n\n\n\n\n\n");
+    printf("\t\t\t\t");
+    printf("*****Wanna edit catchy pictures? You are at right place*****\n\n");
+    printf("\t\t\t\t");
+    printf("Help: Path is the location of your image.\n");
+    printf("\t\t");
+    printf("   (If your image and photo editor are in same folder just type its name with extension)");
     do{
     int radius;
     char str[200];
     char *ptr = str;
-    printf("Enter the path: ");
+    printf("\t\t\t\t\t");
+    printf("\t\tEnter the path of Picture you want to edit: ");
     fflush(stdin);
     gets(str);
-
     while (*ptr != '\0') {
         if (*ptr == '\\') {
             *ptr = '/';
@@ -352,43 +405,75 @@ int main() {
     int a = strlen(str);
     char str_final[a];
     strcpy(str_final, str);
-    printf("Your string length is %d.\n", a);
-    printf("Your entered path is: ");
+    // printf("Your string length is %d.\n", a);
+    printf("\n\n\n");
+    printf("\t\t\t\t\tYour entered path is: ");
     puts(str_final);
 
     // Load an image (replace "input.jpg" with your image file)
     const char *inputFileName = str_final;
     FREE_IMAGE_FORMAT fif = FreeImage_GetFileType(inputFileName, 0);
 
-    if (fif == FIF_UNKNOWN) {
-        fprintf(stderr, "Unsupported image format\n");
-        return 1;
+    while (fif == FIF_UNKNOWN)
+    {
+        printf("\n\t\t\t\t\tUnsupported image format. Try again \n");
+        fflush(stdin);
+        gets(str);
+        ptr=str;
+        while (*ptr != '\0') {
+        if (*ptr == '\\') {
+            *ptr = '/';
+        }
+        ptr++;
+        
+    }
+
+    a = strlen(str);
+    str_final[a];
+    strcpy(str_final, str);
+    // printf("Your string length is %d.\n", a);
+    printf("\n\t\t\tYour entered path is: ");
+    puts(str_final);
+    inputFileName = str_final;
+    fif = FreeImage_GetFileType(inputFileName, 0);
+    if(fif!=FIF_UNKNOWN){
+        break;
+    }
     }
 
     FIBITMAP *image = FreeImage_Load(fif, inputFileName, 0);
 
-    if (!image) {
-        fprintf(stderr, "Error loading image\n");
-        return 1;
+    while (!image) {
+        printf("\n\t\t\t\t\tError loading image,try again: \n");
+        gets(str);
+        ptr=str;
+        while (*ptr != '\0') {
+        if (*ptr == '\\') {
+            *ptr = '/';
+        }
+        ptr++;
+        
     }
 
-    // Ask the user which operation to apply
-    // printf("Choose an operation:\n");
-    // printf("1. Convert to Grayscale\n");
-    // printf("2. Apply Gaussian Blur to Images\n");
-    // printf("3. Change Brightness of Image\n");
-    // printf("4. Rotate Image\n");
-    // printf("5. Apply Sepia Filter\n");
-    // printf("6. Flip Horizontal\n");
-    // printf("7. Flip Vertical\n");
-    // printf("8. Crop Image\n");
-    // printf("9. Resize Image\n");
-    // printf("10. Apply Sharpen Filter:\n");
-    // printf("11. Invert Colors of Image(Negative Image).\n");
-    // printf("12. Apply Artistic Filter\n");
-
-
+    a = strlen(str);
+    str_final[a];
+    strcpy(str_final, str);
+    // printf("Your string length is %d.\n", a);
+    printf("\t\t\t\t\tYour entered path is: ");
+    puts(str_final);
+    inputFileName=str_final;
+    FIBITMAP *image = FreeImage_Load(fif, inputFileName, 0);
+    }
+    system("cls");
+    printf("\n\n\n\n\n\n\n\n\n");
+    printf("\t\t\t\t");
+    printf("Image Loaded successfully ");
+    printf("\n\t\t\t\t");
+    printf("Press any key to continue...");
+    getch();
+    fflush(stdin);
     // selection_menu();
+    printf("\n\n\n\n\n\n\t\t\t\t");
     int choice=selection_menu();
     float factor;
     double angle;
@@ -401,64 +486,88 @@ int main() {
 
     switch (choice) {
         case 1:
+            system("cls");
+            system("COLOR D7");
             convertToGrayscale(image);
             break;
         case 2:
+            system("cls");
+            system("COLOR 40");
             // Ask the user for the radius parameter
             // int radius
-            printf("Enter the radius for blur from one to ten : ");
+            printf("\n\n\n\t\t\t\tEnter the radius for blur from one to ten : ");
             scanf("%d", &radius);
             blur(image, radius);
             break;
         case 3:
-            printf("Enter the factor for brightness:(max 2)\n");
+            system("cls");
+            system("COLOR A0");
+            printf("\n\n\n\t\t\t\tEnter the factor for brightness:(max 2)\n");
             scanf("%f",&factor);
             adjustBrightness(image,factor);
         break;    
         case 4:
-            printf("Enter the angle in degrees to rotate the image:\n");
+            system("cls");
+            system("COLOR B0");
+            printf("\n\n\n\t\t\t\tEnter the angle in degrees to rotate the image:\n");
             scanf("%lf",&angle);
-            rotateImage(image,angle);
+            rotateImage(&image,angle);
             break;
         case 5:
+            system("cls");
+            system("COLOR 27");
             applySepiaFilter(image);
             break;
         case 6:
+            system("cls");
+            system("COLOR 1F");
             flipHorizontal(image);
             break;
         case 7:
+            system("cls");
+            system("COLOR 50");
             flipVertical(image);
             break;
         case 8:
-            printf("Enter the value of startX:\n");
+            system("cls");
+            system("COLOR 47");
+            printf("\n\n\n\t\t\t\tEnter the value of startX:\n");
             scanf("%d",&startX);
-            printf("Enter the value of StartY.\n");
+            printf("\n\n\n\t\t\t\tEnter the value of StartY.\n");
             fflush(stdin);
             scanf("%d",&startY);
-            printf("Enter the width:\n");
+            printf("\n\n\n\t\t\t\tEnter the width:\n");
             fflush(stdin);
             scanf("%d",&width);
-            printf("Enter the height:\n");
+            printf("\n\n\n\t\t\t\tEnter the height:\n");
             fflush(stdin);
             scanf("%d",&height);
-            cropImage(image,startX,startY,width,height);
+            cropImage(&image,startX,startY,width,height);
             break;
         case 9:
-            printf("Enter the new width of the image:\n");
+            system("cls");
+            system("COLOR 60");
+            printf("\n\n\n\t\t\t\tEnter the new width of the image:\n");
             fflush(stdin);
             scanf("%d",&width);
-            printf("Enter the new height of the image:\n");
+            printf("\n\n\n\t\t\t\tEnter the new height of the image:\n");
             fflush(stdin);
             scanf("%d",&height);
-            resizeImage(image,width,height);
+            resizeImage(&image,width,height);
             break;
         case 10:
+            system("cls");
+            system("COLOR B0");
             applySharpenFilter(image);
             break;   
         case 11:
+            system("cls");
+            system("COLOR 5F");
             invertColors(image);
             break; 
         case 12:
+            system("cls");
+            system("COLOR 17");
             applyArtisticFilter(image);
             break;
     
@@ -469,7 +578,7 @@ int main() {
     }
     
 
-    // Save the processed image
+    // for different file types
     char output[50];
     const char *extension = NULL;
 
@@ -480,35 +589,39 @@ int main() {
         case FIF_PNG:
             extension = "png";
             break;
-        // Add more cases for other supported formats as needed
         default:
             fprintf(stderr, "Unsupported image format\n");
             FreeImage_Unload(image);
             return 1;
     }
 
-    // Ask the user for the output file name
     printf("Enter the name of the output file without extension: ");
     fflush(stdin);
     gets(output);
 
-    // Concatenate the output file name with the determined extension
     strcat(output, ".");
     strcat(output, extension);
 
     if (!FreeImage_Save(fif, image, output, 0)) {
         fprintf(stderr, "Error saving image\n");
         FreeImage_Unload(image);
+        printf("Program has ben crashed, press any key to exit...");
+        getch();
         return 1;
     }
 
-    // Unload the image
     FreeImage_Unload(image);
 
     printf("Image processed successfully. Saved as %s\n", output);
     printf("Do you want to edit another picture.\n");
     scanf(" %c",&choice_m);
     }while((choice_m=='y')||(choice_m=='Y'));
+    if(choice_m!='y'&&choice_m!='Y'){
+        printf("\t\t\t\tThanks for using our photo editor.\n");
+        printf("\t\t\t\tHave a nice day :)\n");
+    }
+    printf("Press any key to exit...");
+    getch();
 
     return 0;
 }
