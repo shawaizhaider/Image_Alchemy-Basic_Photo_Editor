@@ -1,1 +1,1 @@
-gcc -o original_test_output.exe photo_editor_original.c -I . -L . -lFreeImage -static-libgcc -static-libstdc++
+gcc -o photo_editor_original_pro.exe photo_editor_original.c -I . -L . -lFreeImage -static-libgcc -static-libstdc++
