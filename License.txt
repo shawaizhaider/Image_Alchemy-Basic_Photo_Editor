@@ -1,10 +1,10 @@
 ImageAlchemy Photo Editor License Agreement
 
-Copyright (c) [2023] Shawaiz Haider, Sannan Shahid, and contributors.
+Copyright (c) [2023] Shawaiz Haider and Sannan Shahid.
 
 All rights reserved.
 
-This photo editor, "ImageAlchemy," is the result of an end semester complex engineering project at the National University of Sciences and Technology by developers Shawaiz Haider and Sannan Shahid. The software is protected by copyright law and international treaties.
+This photo editor, "ImageAlchemy," is the result of an end-semester complex engineering project at the National University of Sciences and Technology by developers Shawaiz Haider and Sannan Shahid. The software is protected by copyright law and international treaties.
 
 LICENSE GRANT:
 Subject to the terms and conditions of this License Agreement, the developers grant you a non-exclusive, non-transferable, limited license to use the ImageAlchemy Photo Editor.
