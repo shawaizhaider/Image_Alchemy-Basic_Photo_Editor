@@ -1,0 +1,27 @@
+ImageAlchemy Photo Editor License Agreement
+
+Copyright (c) [2023] Shawaiz Haider, Sannan Shahid, and contributors.
+
+All rights reserved.
+
+This photo editor, "ImageAlchemy," is the result of an end semester complex engineering project at the National University of Sciences and Technology by developers Shawaiz Haider and Sannan Shahid. The software is protected by copyright law and international treaties.
+
+LICENSE GRANT:
+Subject to the terms and conditions of this License Agreement, the developers grant you a non-exclusive, non-transferable, limited license to use the ImageAlchemy Photo Editor.
+
+RESTRICTIONS:
+You may not sublicense, rent, lease, or sell the software. Any attempt to transfer any of the rights, duties, or obligations hereunder is void.
+
+DISCLAIMER:
+The ImageAlchemy Photo Editor is provided "as is" without warranty of any kind, expressed or implied, including, but not limited to, the warranties of merchantability, fitness for a particular purpose, and non-infringement. The developers do not warrant that the functions contained in the software will meet your requirements or that the operation of the software will be uninterrupted or error-free.
+
+LIMITATION OF LIABILITY:
+In no event shall the developers be liable for any consequential, incidental, indirect, special, or punitive damages whatsoever arising out of the use of or inability to use the ImageAlchemy Photo Editor, even if the developers have been advised of the possibility of such damages.
+
+TERMINATION:
+This License Agreement is effective until terminated. Your rights under this License Agreement will terminate automatically without notice from the developers if you fail to comply with any term(s) of this License Agreement.
+
+Thank you for using ImageAlchemy Photo Editor.
+
+Contact Information: [shaider.bee23seecs@seecs.edu.pk]
+		     [sshahid.bee23seecs@seecs.edu.pk]

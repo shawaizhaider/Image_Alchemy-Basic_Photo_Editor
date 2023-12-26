@@ -1,0 +1,1 @@
+gcc -o ImageAlchemy.exe Image_Alchemy_Source_Code.c -I . -L . -lFreeImage -static-libgcc -static-libstdc++

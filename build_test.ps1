@@ -1,1 +1,0 @@
-gcc -o test_output.exe photo_editor_test.c -I . -L . -lFreeImage -static-libgcc -static-libstdc++

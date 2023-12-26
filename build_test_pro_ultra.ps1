@@ -1,1 +1,0 @@
-gcc -o test_final_pro_ultra.exe test_final_pro_ultra.c -I . -L . -lFreeImage -static-libgcc -static-libstdc++
